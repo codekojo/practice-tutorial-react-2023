@@ -1,5 +1,7 @@
 :root {
-  --background-color: teal;
+  --background-color: silver;
+  --secondary-color: deepskyblue;
+  --border-size: 50%;
 }
 * {
   margin: 0;
@@ -15,83 +17,84 @@ body {
 
 main {
   display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.card__container {
+  background-color: white;
+  width: 500px;
+  border-radius: 10px;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.card {
-  width: 450px;
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
+.image__container {
+  background-color: var(--secondary-color);
+  border-radius: var(--border-size);
+  height: 120px;
+  width: 120px;
+  position: relative;
   margin: 1rem 0;
+  /* margin-left: 50px; */
+}
+.image__src {
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
+
+  top: 0;
+  right: 5px;
 }
 
-.card__img {
-  width: 100%;
-  height: 250px;
-}
-
-.card__body {
-  padding: 1rem;
-}
-
-.card__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card__price {
-  background-color: cornflowerblue;
-  padding: 0.1rem 0.3rem;
-  font-weight: bold;
-  color: black;
-}
-
-.card__header {
-  margin: 0.5rem 0;
-}
-
-.card__description {
-  margin: 0.5rem 0;
-}
-
-.card__btn {
-  padding: 0.5rem;
-  width: 100%;
-  flex: 1;
+.image__quoteRight {
+  background-color: var(--secondary-color);
+  border-radius: var(--border-size);
+  width: 40px;
+  height: 40px;
+  display: block;
+  position: absolute;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  align-self: center;
+  /* overflow: hidden; */
 }
 
-.card__btn p {
-  padding: 0.3rem 1.5rem;
+.card__jobType {
+  /* text-transform: uppercase; */
+  font-variant: small-caps;
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+}
+
+.card__bio {
+  padding: 1rem 2.5rem;
+}
+
+.navigate__user {
   display: flex;
-  justify-items: center;
+  justify-content: space-between;
   align-items: center;
-  align-self: center;
-  border: 1px solid red;
-  border-radius: 5px;
-  color: red;
+  width: 60px;
+}
+.chevron {
+  display: block;
+}
+.chevronRight,
+.chevronLeft {
+  /* padding: 1rem; */
 }
 
-.card__btn p:hover {
-  cursor: pointer;
+.card__btn {
   background-color: red;
-  color: white;
-  transition-property: all;
-  transition-duration: 1s;
-  transition-timing-function: linear;
-}
-
-.clickMoreParagph {
-  color: cornflowerblue;
-}
-
-.clickMoreParagph:hover {
-  cursor: pointer;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  padding: 0.4rem;
+  align-items: center;
+  margin: 1rem 0;
 }

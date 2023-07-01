@@ -1,104 +1,84 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
+import { FaQuoteRight, FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import "./App.css";
 
 function App() {
   const [userData, setUserData] = useState(USERS);
+  const [currentUserData, setCurrentUserData] = useState(userData[0]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [maxArray, setMaxArray] = useState(userData.length);
+  // First Step: When a right or left is clicked a function is invoked
+  // Second Step:  We
 
-  const removeUserCard = (id) => {
-    const usersArray = [...userData];
-
-    if (!id) return;
-
-    const newUsers = usersArray.filter((user) => {
-      return user.userId.toLowerCase() !== id.toLowerCase();
+  const handleChangeUserData = () => {
+    setCurrentIndex((prev) => {
+      return prev + 1;
     });
-
-    setUserData(newUsers);
   };
+
+  useEffect(() => {
+    console.log(currentIndex);
+    if (currentIndex > maxArray) {
+      console.log(currentIndex > maxArray, currentIndex);
+      setCurrentIndex(0);
+      setCurrentUserData(userData[0]);
+      return;
+    } else {
+      console.log("currentIndex useEffect", currentIndex);
+      // setCurrentUserData(userData[currentIndex]);
+    }
+  }, [currentIndex]);
 
   return (
     <main>
-      {userData.map((user) => {
-        return (
-          <CardDetails
-            {...user}
-            removeUserCard={removeUserCard}
-            key={user.userId}
+      <section className="card__container">
+        <div className="image__container">
+          <img
+            src={currentUserData.imageSrc}
+            height={120}
+            width={120}
+            className="image__src"
+            alt={currentUserData.alt}
           />
-        );
-      })}
+          <span className="image__quoteRight">
+            <FaQuoteRight />
+          </span>
+        </div>
+
+        <h5 className="card__username">{currentUserData.name}</h5>
+        <p className="card__jobType">{currentUserData.title}</p>
+
+        <p className="card__bio">{currentUserData.paragraph}</p>
+
+        <div className="navigate__user">
+          <span className="chevron">
+            <FaChevronLeft className="chevronRight" />
+          </span>
+          <span className="chevron">
+            <FaChevronRight className="chevronLeft" />
+          </span>
+        </div>
+
+        <div className="card__btn">
+          <p onClick={() => handleChangeUserData()}>Surprise Me</p>
+        </div>
+      </section>
     </main>
   );
 }
 
 export default App;
 
-// Card Details Component
-
-function CardDetails({
-  userId,
-  title,
-  imageSrc,
-  price,
-  paragraph,
-  alt,
-  removeUserCard,
-}) {
-  const [paragraphGreaterThan, setParagraphGreaterThan] = useState(
-    paragraph?.length > 150
-  );
-
-  const renderParagraph = () => {
-    return paragraphGreaterThan ? (
-      <>
-        <p>
-          {paragraph.slice(0, 300)}...{" "}
-          <span className="clickMoreParagph" onClick={handleShowMoreParagraph}>
-            Read More
-          </span>
-        </p>
-      </>
-    ) : (
-      <p>{paragraph}</p>
-    );
-  };
-
-  const handleShowMoreParagraph = () => {
-    setParagraphGreaterThan(false);
-  };
-
-  return (
-    <section className="card" key={userId}>
-      <img src={imageSrc} className="card__img" alt={alt} loading="lazy" />
-      <div className="card__body" key={userId}>
-        {/* Header */}
-        <div className="card__header">
-          <h3 className="card__title">{title}</h3>
-          <p className="card__price">{price}</p>
-        </div>
-
-        {/* Description */}
-
-        <p className="card__description">{renderParagraph()}</p>
-
-        {/* Button */}
-        <div className="card__btn">
-          <p onClick={() => removeUserCard(userId)}>Not interested</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // Create Random User Using Faker.js
 
 function createRandomUser() {
   return {
     userId: faker.string.uuid(),
-    title: faker.person.jobTitle(),
-    price: faker.commerce.price({ symbol: "$" }),
-    paragraph: faker.lorem.paragraphs({ min: 3, max: 5 }),
+    name: faker.person.fullName(),
+    title: faker.person.jobType(),
+    bio: faker.person.bio(),
+    paragraph: faker.lorem.paragraphs({ min: 1, max: 2 }),
     imageSrc: faker.image.url(),
     alt: faker.commerce.productDescription(),
   };
