@@ -1,34 +1,58 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { faker } from "@faker-js/faker";
 import { FaQuoteRight, FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import "./App.css";
 
 function App() {
-  const [userData, setUserData] = useState(USERS);
+  const [userData] = useState(USERS);
   const [currentUserData, setCurrentUserData] = useState(userData[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [maxArray, setMaxArray] = useState(userData.length);
+  const [maxArray] = useState(userData.length);
+
   // First Step: When a right or left is clicked a function is invoked
   // Second Step:  We
 
-  const handleChangeUserData = () => {
-    setCurrentIndex((prev) => {
-      return prev + 1;
-    });
+  //Fix logic and refactor
+  const handleChangeUserData = (move) => {
+    const currentDataIndex = currentIndex;
+
+    if (currentDataIndex < maxArray - 1) {
+      if (move === "navigateRight") {
+        setCurrentUserData(userData[currentDataIndex + 1]);
+        setCurrentIndex((prev) => {
+          return prev + 1;
+        });
+        return;
+      }
+
+      if (move === "navigateLeft") {
+        if (!(currentDataIndex - 1 < 0)) {
+          setCurrentUserData(userData[currentDataIndex - 1]);
+          setCurrentIndex((prev) => {
+            return prev - 1;
+          });
+          return;
+        } else {
+          setCurrentUserData(userData[maxArray - 1]);
+          setCurrentIndex(maxArray - 1);
+          return;
+        }
+      }
+    } else {
+      setCurrentUserData(userData[0]);
+      setCurrentIndex(0);
+      return;
+    }
   };
 
-  useEffect(() => {
-    console.log(currentIndex);
-    if (currentIndex > maxArray) {
-      console.log(currentIndex > maxArray, currentIndex);
-      setCurrentIndex(0);
-      setCurrentUserData(userData[0]);
-      return;
-    } else {
-      console.log("currentIndex useEffect", currentIndex);
-      // setCurrentUserData(userData[currentIndex]);
-    }
-  }, [currentIndex]);
+  //Function from MDN to get random Int Inclusive
+  function getRandomIntInclusive(min = 0, max = 4) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    const randomValue = Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+    setCurrentUserData(userData[randomValue]);
+    setCurrentIndex(randomValue);
+  }
 
   return (
     <main>
@@ -46,22 +70,30 @@ function App() {
           </span>
         </div>
 
-        <h5 className="card__username">{currentUserData.name}</h5>
+        <h5 className="card__username">
+          {currentUserData.name} {currentIndex}
+        </h5>
         <p className="card__jobType">{currentUserData.title}</p>
 
         <p className="card__bio">{currentUserData.paragraph}</p>
 
         <div className="navigate__user">
           <span className="chevron">
-            <FaChevronLeft className="chevronRight" />
+            <FaChevronLeft
+              className="chevronRight"
+              onClick={() => handleChangeUserData("navigateLeft")}
+            />
           </span>
           <span className="chevron">
-            <FaChevronRight className="chevronLeft" />
+            <FaChevronRight
+              className="chevronLeft"
+              onClick={() => handleChangeUserData("navigateRight")}
+            />
           </span>
         </div>
 
         <div className="card__btn">
-          <p onClick={() => handleChangeUserData()}>Surprise Me</p>
+          <p onClick={() => getRandomIntInclusive()}>Surprise Me</p>
         </div>
       </section>
     </main>

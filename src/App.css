@@ -86,6 +86,7 @@ main {
 }
 .chevronRight,
 .chevronLeft {
+  cursor: pointer;
   /* padding: 1rem; */
 }
 
